@@ -5,6 +5,8 @@ public class SearchBenchmark {
 
 	public static void main(String[] args) {
 		
+		//TODO create a quicksort class to use to sort the array before binary search
+		
 		//initialize int array with 50 items
 		int[] myArray;
 		myArray = new int[50];
@@ -31,19 +33,35 @@ public class SearchBenchmark {
 		//request input from user
 		System.out.println("Please Enter a value to search for: ");
 		int searchNum = sc.nextInt(); //Your Search Value here <--
-		sc.close();
+		
 		
 		int sequentialSearch = seqSearch(myArray, searchNum);
 		if (sequentialSearch == -1) {
 			System.out.println("Your Value was not found, try again");
 		}
 		
-		
-		
+		int binarySearch = search(myArray, searchNum);
+		if(binarySearch == -1) {
+			System.out.println("Your Value was not found, try again");
+			
+			//request input from user
+			System.out.println("Please Enter a value to search for: ");
+			searchNum = sc.nextInt(); //Your Search Value here <--
+			sc.close();
+			
+		} else {
+			System.out.println(binarySearch);
+			}
+		sc.close();
 		
 
 	}
  
+	/* uses a sequential search algorithm on an unordered array
+	 * @param int[] array indicates the array you would like to find a value in
+	 * @param int searchValue indicates the value to search for in the array
+	 * also counts the number of comparisons
+	 */
 	public static int seqSearch(int[] array, int searchValue) {
 		
 		boolean found  = false;
@@ -58,7 +76,7 @@ public class SearchBenchmark {
 				position = index;
 				found = true;
 					System.out.println("Your search value: " + searchValue );
-					System.out.println("Has been found at index: " + position);
+					System.out.println("Has been found using sequential search at index: " + position);
 					System.out.println("It took " + comparisonCount + 
 							" Comparisons to find the search value.");
 				
@@ -70,5 +88,74 @@ public class SearchBenchmark {
 		} // end while loop
 		return position;
 		
-	} 
+	}
+	/** calls a recursive Binary search algorithm to checked the passed array
+	 * 
+	 * @param array array you want to search 
+	 * @param value value you want to search for
+	 * @return
+	 */
+	
+	public static int search(int[] array, int value) {
+		
+		return binSearch(array, 0, array.length-1, value);
+		
+	}
+	
+	/** Binary Search algorithm the ability to count the comparisons
+	 * 
+	 * @param array searched array
+	 * @param first first element of search area/array
+	 * @param last last element of search area/array
+	 * @param searchValue value to be found
+	 * @return
+	 */
+	public static int binSearch(int[] array , int first , int last , int searchValue) {
+		
+		
+		int middle; // middle point defined as (first + last) /2
+		int comparisons = 0; // count comparisons
+		int result;
+		
+		//base case
+		//value not found
+		if(first>last) {
+			return -1;
+		} // end if
+		
+		middle = (first + last) / 2;
+		
+		//Base case if found
+		if(array[middle] == searchValue) {
+			comparisons++;
+			result = middle;
+			System.out.println("Your search value: " + searchValue );
+			System.out.println("Has been found at index: " + result);
+			System.out.println("It took " + comparisons + 
+					" Comparisons to find the search value.");
+			
+			return result;
+			
+			
+		}
+		// if middle value is greater search lower half 
+		// move 
+		else if(array[middle] > searchValue) {
+			comparisons++;
+			return binSearch(array, first, middle - 1, searchValue);
+		}
+		
+		// if middle is less search upper half
+		else {
+			comparisons ++;
+			return binSearch(array, middle + 1, last, searchValue);
+			
+		}
+		
+		
+		
+		
+	}
+	
+	
 }

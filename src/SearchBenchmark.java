@@ -1,6 +1,8 @@
 import java.util.Random;
 import java.util.Scanner;
 
+import sortAlgorithms.IntQuickSort;
+
 public class SearchBenchmark {
 
 	public static void main(String[] args) {
@@ -41,19 +43,16 @@ public class SearchBenchmark {
 		}
 		
 		int binarySearch = search(myArray, searchNum);
-		if(binarySearch == -1) {
-			System.out.println("Your Value was not found, try again");
-			
-			//request input from user
-			System.out.println("Please Enter a value to search for: ");
-			searchNum = sc.nextInt(); //Your Search Value here <--
-			sc.close();
-			
-		} else {
-			System.out.println(binarySearch);
-			}
-		sc.close();
 		
+		// Print the items of the array
+				for(int k = 0; k < myArray.length; k ++) {
+				System.out.println(" index " + k + ": " + myArray[k]);
+				}
+				
+				System.out.println(binarySearch);
+				
+				
+		sc.close();
 
 	}
  
@@ -98,7 +97,7 @@ public class SearchBenchmark {
 	
 	public static int search(int[] array, int value) {
 		
-		return binSearch(array, 0, array.length-1, value);
+		return binSearch(array, 0, array.length-1, value, 0);
 		
 	}
 	
@@ -110,16 +109,20 @@ public class SearchBenchmark {
 	 * @param searchValue value to be found
 	 * @return
 	 */
-	public static int binSearch(int[] array , int first , int last , int searchValue) {
+	public static int binSearch(int[] array , int first , int last , int searchValue, int cmp) {
 		
-		
+		IntQuickSort.quickSort(array);
 		int middle; // middle point defined as (first + last) /2
-		int comparisons = 0; // count comparisons
+		int comparisons = cmp; // count comparisons
 		int result;
 		
 		//base case
 		//value not found
 		if(first>last) {
+			
+			System.out.println("That number is not in the list, try again.");
+			System.out.println("It took " + comparisons + " comparisons.");
+			
 			return -1;
 		} // end if
 		
@@ -129,10 +132,10 @@ public class SearchBenchmark {
 		if(array[middle] == searchValue) {
 			comparisons++;
 			result = middle;
-			System.out.println("Your search value: " + searchValue );
-			System.out.println("Has been found at index: " + result);
-			System.out.println("It took " + comparisons + 
-					" Comparisons to find the search value.");
+			
+			System.out.println("Has been found at index using binary search: " + result);
+			System.out.println("It took " + comparisons + " comparisons to find.");
+			
 			
 			return result;
 			
@@ -141,18 +144,22 @@ public class SearchBenchmark {
 		// if middle value is greater search lower half 
 		// move 
 		else if(array[middle] > searchValue) {
-			comparisons++;
-			return binSearch(array, first, middle - 1, searchValue);
+			
+			
+			return binSearch(array, first, middle - 1, searchValue, cmp+1);
+			
 		}
 		
 		// if middle is less search upper half
 		else {
-			comparisons ++;
-			return binSearch(array, middle + 1, last, searchValue);
+			
+			return binSearch(array, middle + 1, last, searchValue, cmp+1);
 			
 		}
 		
 		
+		
+	
 		
 		
 	}
